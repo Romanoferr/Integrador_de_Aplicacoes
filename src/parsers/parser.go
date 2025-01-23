@@ -1,7 +1,6 @@
 package parsers
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -21,7 +20,7 @@ type Transaction struct {
 	AssetManager  string
 }
 
-func ParseTransactionFile() {
+func ParseTransactionFile() [] Transaction {
 	// Open the Excel file
 	filePath := "../arquivos-statusinvest/StatusInvest-transactions-2025-01-22--23-43-32.xlsx"
 	xlFile, err := excelize.OpenFile(filePath)
@@ -69,15 +68,16 @@ func ParseTransactionFile() {
 
 		// Parse the row into a Transaction
 		quantity, err := strconv.ParseFloat(
-			strings.ReplaceAll(row[4], ",", "."), 64,
+			strings.ReplaceAll(strings.Replace(row[4], ".", "", -1), ",", "."), 64,
 		)
+		
 		if err != nil {
 			log.Printf("Failed to parse Quantity in row %d: %v", i+1, err)
 			continue
 		}
 
 		price, err := strconv.ParseFloat(
-			strings.ReplaceAll(row[5], ",", "."), 64,
+			strings.ReplaceAll(strings.Replace(row[4], ".", "", -1), ",", "."), 64,
 		)
 		if err != nil {
 			log.Printf("Failed to parse Price in row %d: %v", i+1, err)
@@ -99,9 +99,11 @@ func ParseTransactionFile() {
 	}
 
 	// Print the parsed transactions
-	for _, tx := range transactions {
-		fmt.Printf("%+v\n", tx)
-	}
+	// for _, tx := range transactions {
+	// 	fmt.Printf("%+v\n", tx)
+	// }
+
+	return transactions
 }
 
 // parseDateTransactionFile converts a date string from "dd/mm/yyyy" to "yyyy-mm-dd"
