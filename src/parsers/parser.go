@@ -1,4 +1,4 @@
-package main
+package parsers
 
 import (
 	"fmt"
@@ -21,15 +21,19 @@ type Transaction struct {
 	AssetManager  string
 }
 
-
-func parseTransactionFile() {
+func ParseTransactionFile() {
 	// Open the Excel file
-	filePath := "../../arquivos-statusinvest/StatusInvest-transactions-2025-01-22--23-43-32.xlsx"
+	filePath := "../arquivos-statusinvest/StatusInvest-transactions-2025-01-22--23-43-32.xlsx"
 	xlFile, err := excelize.OpenFile(filePath)
 	if err != nil {
 		log.Fatalf("Failed to open Excel file: %v", err)
 	}
-	defer xlFile.Close()
+	defer func(xlFile *excelize.File) {
+		err := xlFile.Close()
+		if err != nil {
+
+		}
+	}(xlFile)
 
 	// Read the "Carteira" sheet
 	sheetName := "Carteira"
@@ -59,7 +63,9 @@ func parseTransactionFile() {
 			assetType = "Acao"
 		} else if row[1] == "Fundos imobiliários" {
 			assetType = "FII"
-		} else { assetType = row[1] }
+		} else {
+			assetType = row[1]
+		}
 
 		// Parse the row into a Transaction
 		quantity, err := strconv.ParseFloat(
@@ -106,9 +112,4 @@ func parseDateTransactionFile(dateStr string) string {
 		return ""
 	}
 	return parsed.Format("2006-01-02")
-}
-
-
-func main() {
-    parseTransactionFile()
 }

@@ -1,7 +1,9 @@
 package main
 
+import (
+	"main/parsers"
+)
+
 func main() {
-	// TODO:
-	// parse xlsx transaction
-	// call transaction functions
+	parsers.ParseTransactionFile()
 }
