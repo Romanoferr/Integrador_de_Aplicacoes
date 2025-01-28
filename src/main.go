@@ -20,13 +20,13 @@ func main() {
 	connectdb.ConnectDB();
 
 	// adding the parsed transactions to the database - schema: transactions
-	// fmt.Printf("adding all transactions to db\n")
-	// for _, trs := range transactions {
-	// 	_, err := transaction.AddTransaction(trs)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-	// }
+	fmt.Printf("adding all transactions to db\n")
+	for _, trs := range transactions {
+		_, err := transaction.AddTransaction(trs)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
 	trs1, err := transaction.TransactionByAssetId("BBAS3")
 	if err != nil {
