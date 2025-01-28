@@ -6,8 +6,6 @@ import (
 	connectdb "main/data-access"
 )
 
-//var db *sql.DB
-
 type Transaction struct {
 	ID            int64
 	OperationDate string
