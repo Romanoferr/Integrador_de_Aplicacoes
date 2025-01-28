@@ -6,21 +6,12 @@ import (
 	"strings"
 	"time"
 
+	transaction "main/data-access/transaction"
+
 	"github.com/xuri/excelize/v2"
 )
 
-type Transaction struct {
-	ID            int64
-	OperationDate string
-	AssetType     string
-	AssetId       string
-	Operation     string
-	Quantity      float64
-	Price         float64
-	AssetManager  string
-}
-
-func ParseTransactionFile() [] Transaction {
+func ParseTransactionFile() [] transaction.Transaction {
 	// Open the Excel file
 	filePath := "../arquivos-statusinvest/StatusInvest-transactions-2025-01-22--23-43-32.xlsx"
 	xlFile, err := excelize.OpenFile(filePath)
@@ -42,7 +33,7 @@ func ParseTransactionFile() [] Transaction {
 	}
 
 	// Parse rows into transactions
-	var transactions []Transaction
+	var transactions []transaction.Transaction
 	var idCounter int64 = 1
 
 	// Skip the header row
@@ -57,6 +48,7 @@ func ParseTransactionFile() [] Transaction {
 			continue
 		}
 
+		// Parse the row into a Transaction
 		var assetType string
 		if row[1] == "Ações" {
 			assetType = "Acao"
@@ -66,25 +58,23 @@ func ParseTransactionFile() [] Transaction {
 			assetType = row[1]
 		}
 
-		// Parse the row into a Transaction
 		quantity, err := strconv.ParseFloat(
 			strings.ReplaceAll(strings.Replace(row[4], ".", "", -1), ",", "."), 64,
 		)
-		
 		if err != nil {
 			log.Printf("Failed to parse Quantity in row %d: %v", i+1, err)
 			continue
 		}
 
 		price, err := strconv.ParseFloat(
-			strings.ReplaceAll(strings.Replace(row[4], ".", "", -1), ",", "."), 64,
+			strings.ReplaceAll(strings.Replace(row[5], ".", "", -1), ",", "."), 64,
 		)
 		if err != nil {
 			log.Printf("Failed to parse Price in row %d: %v", i+1, err)
 			continue
 		}
 
-		tx := Transaction{
+		tx := transaction.Transaction{
 			ID:            idCounter,
 			OperationDate: parseDateTransactionFile(row[0]),
 			AssetType:     assetType,

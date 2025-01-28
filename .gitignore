@@ -1,1 +1,4 @@
-/arquivos*
+/arquivos-statusinvest
+/arquivos-statusinvest/*
+*.xlsx
+*/*.xlsx
