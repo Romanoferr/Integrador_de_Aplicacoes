@@ -9,7 +9,7 @@ import (
 
 	transaction "main/data-access/transaction"
 
-	asset "main/data-access/asset"
+	asset "main/data-access/assets"
 
 	"github.com/xuri/excelize/v2"
 )
