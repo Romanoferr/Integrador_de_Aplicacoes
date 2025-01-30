@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS asset_allocations (
     actual_price DECIMAL(10, 2),
     median_return DECIMAL(10, 2) NOT NULL,
     quantity DECIMAL(10, 6),
-    balance DECIMAL(10, 6) NOT NULL,
+    balance DECIMAL(10, 2) NOT NULL,
     today_return DECIMAL(10, 2),
     KEY(id),
     UNIQUE (asset_allocation_date, asset_owner, asset_id)

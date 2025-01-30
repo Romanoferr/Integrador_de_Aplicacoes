@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	connectdb "main/data-access"
-	asset "main/data-access/assets"
+	asset "main/data-access/asset-allocations"
 	"main/data-access/transaction"
 	parsers "main/parsers"
+
 	// transaction "main/data-access/transaction"
+	connectdb "main/data-access"
 )
 
 const filePath = "../arquivos-status/"
@@ -35,11 +36,9 @@ func setupAssetAllocations(assetSheetFile string, assetOwner string) (bool, erro
 		_, err := asset.AddAssetAllocation(alcs)
 		if err != nil {
 			fmt.Println(err)
-		}
 	}
-
+	}
 	return true, err;
-
 }
 
 func setupTransactions(transactionSheetFile string) {
@@ -65,22 +64,34 @@ func setupTransactions(transactionSheetFile string) {
 
 
 func main() {
+
 	connectdb.ConnectDB();
 
-	st1, err := setupAssetAllocations(assetSheetFile1, assetSheetOwner1);
-	if err != nil {
-		log.Printf("Error setting up allocations for file: %s: ", assetSheetFile1)
+	percentages, err := asset.CalculateAssetTypePercentages()
+	if err != nil{
+		fmt.Println(err)
 	}
+
+	fmt.Println("------------------------------------")
+
+	for _, per := range percentages {
+		fmt.Printf("AssetType: %s, Percentage: %.2f%%, Balance: %.2f\n", per.AssetType, per.Percentage, per.Balance)
+	}
+
+	fmt.Println("------------------------------------")
+
+	// st1, err := setupAssetAllocations(assetSheetFile1, assetSheetOwner1);
+	// if err != nil {
+	// 	log.Printf("Error setting up allocations for file: %s: ", assetSheetFile1)
+	// }
 	
-	st2, err := setupAssetAllocations(assetSheetFile2, assetSheetOwner2);
-	if err != nil {
-		log.Printf("Error setting up allocations for file: %s: ", assetSheetFile2)
+	// st2, err := setupAssetAllocations(assetSheetFile2, assetSheetOwner2);
+	// if err != nil {
+	// 	log.Printf("Error setting up allocations for file: %s: ", assetSheetFile2)
+	// }
+
+	// if st1 && st2 {
+	// 	setupTransactions(transactionSheetFile1);
+
+	// }
 	}
-
-	if st1 && st2 {
-		setupTransactions(transactionSheetFile1);
-
-	}
-
-	
-}
