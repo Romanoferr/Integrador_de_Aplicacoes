@@ -48,7 +48,7 @@ func setupTransactions(transactionSheetFile string) {
 		fmt.Println(err)
 	}
 
-	// printing the parsed transactions
+	// // printing the parsed transactions
 	// for _, transaction := range transactions {
 	// 	fmt.Printf("%+v\n", transaction)
 	// }
@@ -81,4 +81,6 @@ func main() {
 		setupTransactions(transactionSheetFile1);
 
 	}
+
+	
 }
