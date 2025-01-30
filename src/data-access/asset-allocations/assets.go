@@ -125,3 +125,11 @@ func TotalBalanceByAllAssetTypes() (map[string]float64, error) {
 	return balances, nil
 }
 
+func SumTotalBalance() (float64, error) {
+	var totalBalance float64
+	err := connectdb.Db.QueryRow("SELECT SUM(balance) FROM asset_allocations").Scan(&totalBalance)
+	if err != nil {
+		return 0, err
+	}
+	return totalBalance, nil
+}

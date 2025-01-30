@@ -72,14 +72,28 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Println("------------------------------------")
+	fmt.Println("-------------------------------------------------------")
 
 	for _, per := range percentages {
-		fmt.Printf("AssetType: %s, Percentage: %.2f%%, Balance: %.2f\n", per.AssetType, per.Percentage, per.Balance)
+		fmt.Printf("Porcentagem: %.2f%%, Balance: R$%.2f -->> %s\n", per.Percentage, per.Balance, per.AssetType)
 	}
 
-	fmt.Println("------------------------------------")
+	fmt.Println("-------------------------------------------------------")
 
+	assetTypeTotalBalances, err := asset.CalculateAssetTypeTotalBalances()
+	if err != nil {
+        fmt.Println(err)
+    }
+
+	totalSum := 0.0
+	for _, totalBalance := range assetTypeTotalBalances {
+		totalSum += totalBalance
+	}
+
+	fmt.Printf("Total Asset: R$%.2f\n", totalSum)
+
+
+	fmt.Println("-------------------------------------------------------")
 	// st1, err := setupAssetAllocations(assetSheetFile1, assetSheetOwner1);
 	// if err != nil {
 	// 	log.Printf("Error setting up allocations for file: %s: ", assetSheetFile1)
