@@ -104,9 +104,9 @@ func TotalBalanceByAssetType(assetType string) (float64, error) {
 	return totalBalance, nil
 }
 
-func TotalBalanceByAllAssetTypes() (map[string]float64, error) {
+func TotalBalanceByAllAssetTypes(date string) (map[string]float64, error) {
 	balances := make(map[string]float64)
-	rows, err := connectdb.Db.Query("SELECT asset_type, SUM(balance) FROM asset_allocations GROUP BY asset_type")
+	rows, err := connectdb.Db.Query("SELECT asset_type, SUM(balance) FROM asset_allocations WHERE asset_allocation_date = ? GROUP BY asset_type", date)
 	if err != nil {
 		return nil, err
 	}
@@ -125,9 +125,9 @@ func TotalBalanceByAllAssetTypes() (map[string]float64, error) {
 	return balances, nil
 }
 
-func SumTotalBalance() (float64, error) {
+func SumTotalBalance(date string) (float64, error) {
 	var totalBalance float64
-	err := connectdb.Db.QueryRow("SELECT SUM(balance) FROM asset_allocations").Scan(&totalBalance)
+	err := connectdb.Db.QueryRow("SELECT SUM(balance) FROM asset_allocations where asset_allocation_date = ?", date).Scan(&totalBalance)
 	if err != nil {
 		return 0, err
 	}

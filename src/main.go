@@ -14,7 +14,7 @@ const transactionSheetFile1 = "carteira-export-2025-01-29_BC.xlsx"
 func main() {
 	connectdb.ConnectDB()
 
-	setup.CalculateAndDisplaySomestuff()
+	setup.CalculateAndDisplaySomestuff("2025-01-29")
 
 	assetFiles, owners, err := setup.GetAllAssetFiles(filePathAssets)
 	if err != nil {

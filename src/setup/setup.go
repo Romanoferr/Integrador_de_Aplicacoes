@@ -11,56 +11,6 @@ import (
 	// transaction "main/data-access/transaction"
 )
 
-func GetAllAssetFiles(directory string) ([]string, []string, error) {
-	files, err := os.ReadDir(directory)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	var assetFiles []string
-	var owners []string
-	for _, file := range files {
-		if strings.HasSuffix(file.Name(), ".xlsx") {
-			assetFiles = append(assetFiles, file.Name())
-			if strings.Contains(file.Name(), "_R") {
-				owners = append(owners, "Romano")
-			} else if strings.Contains(file.Name(), "_BC") {
-				owners = append(owners, "Bruna")
-			} else {
-				owners = append(owners, "undefined_Owner")
-			}
-		}
-	}
-	return assetFiles, owners, nil
-}
-
-func CalculateAndDisplaySomestuff() {
-	percentages, err := asset.CalculateAssetTypePercentages()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("-------------------------------------------------------")
-
-	for _, per := range percentages {
-		fmt.Printf("Porcentagem: %.2f%%, Balance: R$%.2f -->> %s\n", per.Percentage, per.Balance, per.AssetType)
-	}
-	fmt.Println("-------------------------------------------------------")
-
-	assetTypeTotalBalances, err := asset.CalculateAssetTypeTotalBalances()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	totalSum := 0.0
-	for _, totalBalance := range assetTypeTotalBalances {
-		totalSum += totalBalance
-	}
-
-	fmt.Printf("Total Asset: R$%.2f\n", totalSum)
-	fmt.Println("-------------------------------------------------------")
-}
-
 func SetupAssetAllocations(assetSheetFile string, assetOwner string) (bool, error) {
 	allocations, err := parsers.ParseAllSheetsAssetAllocations(assetSheetFile, assetOwner)
 	if err != nil {
@@ -92,3 +42,54 @@ func SetupTransactions(transactionSheetFile string) {
 		}
 	}
 }
+
+func GetAllAssetFiles(directory string) ([]string, []string, error) {
+	files, err := os.ReadDir(directory)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var assetFiles []string
+	var owners []string
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), ".xlsx") {
+			assetFiles = append(assetFiles, file.Name())
+			if strings.Contains(file.Name(), "_R") {
+				owners = append(owners, "Romano")
+			} else if strings.Contains(file.Name(), "_BC") {
+				owners = append(owners, "Bruna")
+			} else {
+				owners = append(owners, "undefined_Owner")
+			}
+		}
+	}
+	return assetFiles, owners, nil
+}
+
+func CalculateAndDisplaySomestuff(date string) {
+	percentages, err := asset.CalculateAssetTypePercentages(date)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("-------------------------------------------------------")
+
+	for _, per := range percentages {
+		fmt.Printf("Porcentagem: %.2f%%, Balance: R$%.2f -->> %s\n", per.Percentage, per.Balance, per.AssetType)
+	}
+	fmt.Println("-------------------------------------------------------")
+
+	assetTypeTotalBalances, err := asset.CalculateAssetTypeTotalBalances(date)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	totalSum := 0.0
+	for _, totalBalance := range assetTypeTotalBalances {
+		totalSum += totalBalance
+	}
+
+	fmt.Printf("Total Asset: R$%.2f\n", totalSum)
+	fmt.Println("-------------------------------------------------------")
+}
+
