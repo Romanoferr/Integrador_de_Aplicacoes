@@ -47,7 +47,7 @@ func AssetAllocationByAssetId(assetId string) ([]AssetAllocation, error) {
 	return assetAllocations, nil
 }
 
-func assetAllocationByAssetType(assetType string) ([]AssetAllocation, error) {
+func AssetAllocationByAssetType(assetType string) ([]AssetAllocation, error) {
 	var assetAllocations []AssetAllocation
 	rows, err := connectdb.Db.Query("SELECT id, asset_allocation_date, asset_owner, asset_id, asset_type, median_price, actual_price, median_return, quantity, balance, today_return FROM asset_allocations WHERE asset_type = ?", assetType)
 	if err != nil {
@@ -66,3 +66,5 @@ func assetAllocationByAssetType(assetType string) ([]AssetAllocation, error) {
 	}
 	return assetAllocations, nil
 }
+
+func AllAssetAllocations() ()

@@ -5,35 +5,32 @@ import (
 	"log"
 	connectdb "main/data-access"
 	asset "main/data-access/assets"
+	"main/data-access/transaction"
 	parsers "main/parsers"
 	// transaction "main/data-access/transaction"
 )
 
-const filePath = "../arquivos-statusinvest/"
-const assetSheetFile = "StatusInvest-assets-2025-01-28--12-43-30_BC.xlsx"
-const assetSheetOwner = "Bruna"
+const filePath = "../arquivos-status/"
+const assetSheetFile1 = "carteira-patrimonio-export-2025-01-29_BC.xlsx"
+const assetSheetOwner1 = "Bruna"
+const assetSheetFile2 = "carteira-patrimonio-export-2025-01-29_R.xlsx"
+const assetSheetOwner2 = "Romano"
 
-func main() {
-	allocations, err := parsers.ParseAllSheetsAssetAllocations(filePath+assetSheetFile, assetSheetOwner)
-		if err != nil {
-			log.Fatalf("Error parsing asset allocations: %v", err)
-		}
+const transactionSheetFile1="carteira-export-2025-01-29_BC.xlsx"
 
-	allocationsR, err := parsers.ParseAllSheetsAssetAllocations(filePath+"StatusInvest-assets-2025-01-22--23-43-37.xlsx", "Romano")
-		if err != nil {
-			log.Fatalf("Error parsing asset allocations: %v", err)
-		}
 
-	// append allocation and allocationR
-	allocations = append(allocations, allocationsR...)
-
-	// print allocations BC
-	for _, allocation := range allocations {
-		fmt.Printf("%+v\n", allocation)
+func setupAssetAllocations(assetSheetFile string, assetOwner string) (bool, error) {
+	allocations, err := parsers.ParseAllSheetsAssetAllocations(filePath+assetSheetFile, assetOwner)
+	if err != nil {
+		log.Fatalf("Error parsing asset allocations: %v", err)
 	}
 
-	connectdb.ConnectDB();
+	// // print allocations
+	// for _, allocation := range allocations {
+	// fmt.Printf("%+v\n", allocation)
+	// }
 
+	// adding allocations to database
 	for _, alcs := range allocations {
 		_, err := asset.AddAssetAllocation(alcs)
 		if err != nil {
@@ -41,30 +38,47 @@ func main() {
 		}
 	}
 
-	// fmt.Printf("parsing transactions...\n")
-	// transactions := parsers.ParseTransactionFile("StatusInvest-transactions-2025-01-28--12-45-32_BC.xlsx")
+	return true, err;
 
-	// // printing the parsed transactions
+}
+
+func setupTransactions(transactionSheetFile string) {
+	transactions, err := parsers.ParseTransactionFile(filePath+transactionSheetFile)
+	if err != nil{
+		fmt.Println(err)
+	}
+
+	// printing the parsed transactions
 	// for _, transaction := range transactions {
 	// 	fmt.Printf("%+v\n", transaction)
 	// }
 
-	// fmt.Printf("connecting to do db\n")
-	// connectdb.ConnectDB();
+	// adding the parsed transactions to the database - schema: transactions
+	fmt.Printf("adding all transactions to db\n")
+	for _, trs := range transactions {
+		_, err := transaction.AddTransaction(trs)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
 
-	// // adding the parsed transactions to the database - schema: transactions
-	// fmt.Printf("adding all transactions to db\n")
-	// for _, trs := range transactions {
-	// 	_, err := transaction.AddTransaction(trs)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-	// }
 
-	// trs1, err := transaction.TransactionByAssetId("BBAS3")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Printf("%+v\n", trs1)
+func main() {
+	connectdb.ConnectDB();
 
+	st1, err := setupAssetAllocations(assetSheetFile1, assetSheetOwner1);
+	if err != nil {
+		log.Printf("Error setting up allocations for file: %s: ", assetSheetFile1)
+	}
+	
+	st2, err := setupAssetAllocations(assetSheetFile2, assetSheetOwner2);
+	if err != nil {
+		log.Printf("Error setting up allocations for file: %s: ", assetSheetFile2)
+	}
+
+	if st1 && st2 {
+		setupTransactions(transactionSheetFile1);
+
+	}
 }

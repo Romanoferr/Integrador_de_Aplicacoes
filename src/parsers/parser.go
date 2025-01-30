@@ -22,10 +22,9 @@ type AssetSheet struct {
 
 var assetSheetCollection = []string{"Ações", "FIIs", "Tesouro", "ETF", "ETF Exterior"}
 
-func ParseTransactionFile(StatusInvestTransactionFile string) [] transaction.Transaction {
+func ParseTransactionFile(fullPathTransactionFile string) ([] transaction.Transaction, error) {
 	// Open the Excel file
-	filePath := "../arquivos-statusinvest/"
-	xlFile, err := excelize.OpenFile(filePath+StatusInvestTransactionFile)
+	xlFile, err := excelize.OpenFile(fullPathTransactionFile)
 	if err != nil {
 		log.Fatalf("Failed to open Excel file: %v", err)
 	}
@@ -98,12 +97,7 @@ func ParseTransactionFile(StatusInvestTransactionFile string) [] transaction.Tra
 		idCounter++
 	}
 
-	// Print the parsed transactions
-	// for _, tx := range transactions {
-	// 	fmt.Printf("%+v\n", tx)
-	// }
-
-	return transactions
+	return transactions, nil
 }
 
 
@@ -176,7 +170,7 @@ func ParseAllSheetsAssetAllocations(filePath string, onwer string) ([]asset.Asse
 	for _, sheet := range assetSheetCollection {
 		allocationsB, err := ParseAssetAllocations(filePath, sheet, onwer)
 		if err != nil {
-			log.Printf("Error parsing asset allocations: %v", err)
+			log.Printf("Error parsing asset allocations for owner %s: %v", onwer, err)
 		}
 		allocations = append(allocations, allocationsB...)
 	}

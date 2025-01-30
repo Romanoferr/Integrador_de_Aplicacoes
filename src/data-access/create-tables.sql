@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS statusinvest;
 
--- DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS transactions;
 CREATE TABLE IF NOT EXISTS transactions (
     id INT AUTO_INCREMENT NOT NULL,
     operation_date DATE NOT NULL,
