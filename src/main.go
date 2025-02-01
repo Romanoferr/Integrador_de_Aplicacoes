@@ -64,7 +64,6 @@ func setupTransactions(transactionSheetFile string) {
 
 
 func main() {
-
 	connectdb.ConnectDB();
 
 	percentages, err := asset.CalculateAssetTypePercentages()
