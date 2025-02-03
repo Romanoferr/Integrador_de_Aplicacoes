@@ -11,9 +11,9 @@ type AssetBalance struct {
 	Percentage float64
 }
 
-//Problema ETF Exterior
-func CalculateSumOfBalances() (float64, error) {
-    sumTotalBalance, err := SumTotalBalance("2025-01-30")
+
+func CalculateSumOfBalances(date string) (float64, error) {
+    sumTotalBalance, err := SumTotalBalance(date)
     if err != nil {
         return 0.0, err
     }
