@@ -143,7 +143,7 @@ func ParseFixedIncome(filePath, sheetName, onwer string) ([]asset.AssetAllocatio
 			strings.ReplaceAll(strings.ReplaceAll(row[6], "%", ""), ",", "."), 64,
 		)
 		if err != nil {
-			log.Printf("Failed to parse MedianReturn in row %d: %v", i+1, err)
+			log.Printf("Failed to parse MedianReturn in row %d: %v, for file <%v>", i+1, err, filePath)
 			continue
 		}
 
@@ -230,11 +230,12 @@ func ParseAssetAllocations(filePath, sheetName string, onwer string) ([]asset.As
 			return val
 		}
 
+		// Also need to replace the dot for empty caracther to parse the float
 		medianReturn, err := strconv.ParseFloat(
 			strings.ReplaceAll(strings.ReplaceAll(row[4], "%", ""), ",", "."), 64,
 		)
 		if err != nil {
-			log.Printf("Failed to parse MedianReturn in row %d: %v", i+1, err)
+			log.Printf("Failed to parse MedianReturn in row %d: %v - for file<%v>, sheet: <%v>", i+1, err, filePath, sheetName)
 			continue
 		}
 
@@ -242,7 +243,7 @@ func ParseAssetAllocations(filePath, sheetName string, onwer string) ([]asset.As
 			strings.ReplaceAll(strings.ReplaceAll(row[7], "%", ""), ",", "."), 64,
 		)
 		if err != nil {
-			log.Printf("Failed to parse MedianReturn in row %d: %v", i+1, err)
+			log.Printf("Failed to parse TodayReturn in row %d: %v", i+1, err)
 			continue
 		}
 		
