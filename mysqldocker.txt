@@ -1,3 +1,7 @@
 ## baixar docker desktop
+powershell
 docker login
 docker run --name mysql-docker-integrator -p 3306:3306 -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
+    Ou basta rodar o container
+GOOSE_DRIVER=mysql GOOSE_DBSTRING="root:my-secret-pw@/dbname" goose status 
+    para verificar a conexão do goose com o banco do docker dentro de cd sql/schema
