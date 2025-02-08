@@ -5,18 +5,26 @@ import (
 	"fmt"
 	"log"
 
+	"os"
+
 	"github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 var Db *sql.DB
 
 func ConnectDB() (*sql.DB, error) {
+	err1 := godotenv.Load()
+	if err1 != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	// Capture connection properties.
 	cfg := mysql.Config{
-		User:   "gomysql",
-		Passwd: "gomysql",
-		Addr:   "127.0.0.1:3306",
-		DBName: "statusinvest",
+		User:   os.Getenv("DOCKER_DB_USER"),
+		Passwd: os.Getenv("DOCKER_DB_PASSWORD"),
+		Addr:  	os.Getenv("DB_ADDR"),
+		DBName: os.Getenv("DOCKER_DB_NAME"),
 	}
 	// Get a database handle.
 	var err error

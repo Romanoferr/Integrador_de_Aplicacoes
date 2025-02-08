@@ -27,6 +27,10 @@ func main() {
 			log.Printf("Error setting up allocations for file: %s: %v", assetFile, err)
 		}
 	}
+}
+
+func main() {
+	connectdb.ConnectDB();
 
 	setup.SetupTransactions(filePathTransactions+transactionSheetFile1)
 }
