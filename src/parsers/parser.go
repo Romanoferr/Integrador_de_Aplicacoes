@@ -20,7 +20,7 @@ type AssetSheet struct {
 	Owner string
 }
 
-var assetSheetCollection = []string{"Ações", "FIIs", "Tesouro", "ETF", "ETF Exterior"}
+var assetSheetCollection = []string{"Ações", "FIIs", "Tesouro", "ETF", "ETF Exterior", "BDR"}
 
 func ParseTransactionFile(fullPathTransactionFile string) ([] transaction.Transaction, error) {
 	// Open the Excel file

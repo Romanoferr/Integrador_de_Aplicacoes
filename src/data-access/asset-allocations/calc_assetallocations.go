@@ -11,9 +11,9 @@ type AssetBalance struct {
 	Percentage float64
 }
 
-//Problema ETF Exterior
-func CalculateSumOfBalances() (float64, error) {
-    sumTotalBalance, err := SumTotalBalance()
+
+func CalculateSumOfBalances(date string) (float64, error) {
+    sumTotalBalance, err := SumTotalBalance(date)
     if err != nil {
         return 0.0, err
     }
@@ -30,8 +30,8 @@ func CalculateAssetTypeTotalBalance(assetType string) (float64, error) {
 	return totalBalance, nil
 }
 
-func CalculateAssetTypeTotalBalances() (map[string]float64, error) {
-    totalBalances, err := TotalBalanceByAllAssetTypes()
+func CalculateAssetTypeTotalBalances(date string) (map[string]float64, error) {
+    totalBalances, err := TotalBalanceByAllAssetTypes(date)
     if err != nil {
         return nil, err
     }
@@ -41,8 +41,8 @@ func CalculateAssetTypeTotalBalances() (map[string]float64, error) {
     return totalBalances, nil
 }
 
-func CalculateAssetTypePercentages() ([]AssetBalance, error) {
-    totalBalances, err := TotalBalanceByAllAssetTypes()
+func CalculateAssetTypePercentages(date string) ([]AssetBalance, error) {
+    totalBalances, err := TotalBalanceByAllAssetTypes(date)
     if err != nil {
         return nil, err
     }
